@@ -2,75 +2,22 @@
 
 namespace  App\Services;
 
-use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
-use Spatie\Crawler\CrawlObserver;
-use Spatie\LinkChecker\Reporters\BaseReporter;
+use Symfony\Component\DomCrawler\Crawler;
 
-class CrawlData extends BaseReporter
+class CrawlData
 {
 
+    const url = 'https://www.seminovosbh.com.br/resultadobusca/index/veiculo/carro/marca/BMW/modelo/1239/usuario/todos';
 
-    public function crawlFailed(
-        UriInterface $url,
-        RequestException $requestException,
-        ?UriInterface $foundOnUrl = null
-    ){
-        parent::crawlFailed($url, $requestException, $foundOnUrl);
+    static public function getLinksFirstPage(){
+        $html = file_get_contents(self::url);
+        $crawler = new Crawler($html, 'https://www.seminovosbh.com.br/');
 
-        $statusCode = $requestException->getCode();
+        $nodeValues = $crawler->filter('.titulo-busca > a')->each(function (Crawler $node, $i) {
+            return $node->link()->getUri();
+        });
 
-        if ($this->isExcludedStatusCode($statusCode)) {
-            return;
-        }
-    }
-
-    public function finishedCrawling()
-    {
-        collect($this->urlsGroupedByStatusCode)
-            ->each(function ($urls, $statusCode) {
-                if ($this->isSuccessOrRedirect($statusCode)) {
-                    return;
-                }
-
-                $count = count($urls);
-
-                if ($statusCode == static::UNRESPONSIVE_HOST) {
-                    return;
-                }
-
-                return $count;
-
-            });
-    }
-
-
-    /**
-     * Called when the crawler has crawled the given url successfully.
-     *
-     * @param \Psr\Http\Message\UriInterface $url
-     * @param \Psr\Http\Message\ResponseInterface $response
-     * @param \Psr\Http\Message\UriInterface|null $foundOnUrl
-     */
-    /**
-     * Called when the crawler has crawled the given url successfully.
-     *
-     * @param \Psr\Http\Message\UriInterface $url
-     * @param \Psr\Http\Message\ResponseInterface $response
-     * @param \Psr\Http\Message\UriInterface|null $foundOnUrl
-     */
-     public function crawled(
-        UriInterface $url,
-        ResponseInterface $response,
-        ?UriInterface $foundOnUrl = null
-    ){
-        $statusCode = $response->getStatusCode();
-
-        if ($this->isExcludedStatusCode($statusCode)) {
-            return;
-        }
-
+        return $nodeValues;
     }
 
 }

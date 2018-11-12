@@ -2,14 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\CrawlerData;
+use App\Entities\Url;
 use Illuminate\Http\Request;
-use Spatie\Crawler\Crawler;
-use Spatie\Crawler\CrawlObserver;
+use Symfony\Component\DomCrawler\Crawler;
 use App\Services\CrawlData;
 
 
 class CrawlerController extends Controller
 {
+
+    /**
+     * @var crawlDataService
+     */
+    private $crawlDataService;
+
+    /**
+     * CrawlerController constructor.
+     */
+    public function __construct(CrawlData $crawlDataService) {
+        $this->crawlDataService = $crawlDataService;
+    }
 
     /**
      * Display a listing of the resource.
@@ -18,10 +31,14 @@ class CrawlerController extends Controller
      */
     public function index()
     {
-        $url = 'https://www.seminovosbh.com.br/resultadobusca/index/veiculo/carro/marca/BMW/modelo/1239/usuario/todos';
-        Crawler::create()->setCrawlObserver(new CrawlData())->startCrawling($url);
 
-        return view('welcome');
+        $firstLinks = CrawlData::getLinksFirstPage();
+        foreach ($firstLinks as $link){
+            Url::create(['url' => $link]);
+        }
+
+        return $firstLinks;
+
     }
 
     /**

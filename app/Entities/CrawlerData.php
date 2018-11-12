@@ -7,11 +7,11 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
- * Class Url.
+ * Class CrawlerData.
  *
  * @package namespace App\Entities;
  */
-class Url extends Model implements Transformable
+class CrawlerData extends Model implements Transformable
 {
     use TransformableTrait;
 
@@ -21,15 +21,19 @@ class Url extends Model implements Transformable
      * @var array
      */
     protected $fillable = [
-        'url',
+        'marca',
+        'modelo',
+        'ano_fabricacao',
+        'ano_modelo',
+        'preco',
     ];
 
     /**
-     * Get the phone record associated with the user.
+     * Get the user that owns the phone.
      */
-    public function getDataUrl()
+    public function user()
     {
-        return $this->hasOne('CrawlerData', 'url_id');
+        return $this->belongsTo('Url', 'id');
     }
 
 }
