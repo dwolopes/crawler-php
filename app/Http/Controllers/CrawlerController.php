@@ -32,12 +32,19 @@ class CrawlerController extends Controller
     public function index()
     {
 
-        $firstLinks = CrawlData::getLinksFirstPage();
-        foreach ($firstLinks as $link){
-            Url::create(['url' => $link]);
+
+        // Once the Url table is populated, its not necessary to crawl the first page of seminovosbh again
+        $links = Url::all();
+
+        if(count($links) == 0){
+            $firstLinks = CrawlData::getLinksFirstPage();
+            foreach ($firstLinks as $link){
+                $formattedUrl = CrawlData::formatUrl($link);
+                Url::create(['url' => $formattedUrl]);
+            }
         }
 
-        return $firstLinks;
+        return view('welcome');
 
     }
 
@@ -46,9 +53,16 @@ class CrawlerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function crawl(Request $request)
     {
-        //
+        $savedUrls = Url::all();
+        foreach ($savedUrls as $url){
+            $price = $this->crawlDataService->getDataDetails($url->url);
+            $arrayGeneralData = CrawlData::getGeneralDataFromUrl($url->url);
+
+            return gettype($price);
+        }
+
     }
 
     /**

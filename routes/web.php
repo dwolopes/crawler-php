@@ -12,3 +12,4 @@
 */
 
 Route::resource("/", "CrawlerController");
+Route::post("/crawl", "CrawlerController@crawl")->name('crawl');
