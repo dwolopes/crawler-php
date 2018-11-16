@@ -2,15 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Url;
+use http\Env\Response;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
-use App\Http\Requests\UrlCreateRequest;
-use App\Http\Requests\UrlUpdateRequest;
-use App\Repositories\UrlRepository;
-use App\Validators\UrlValidator;
 
 /**
  * Class UrlsController.
@@ -19,98 +13,16 @@ use App\Validators\UrlValidator;
  */
 class UrlsController extends Controller
 {
-    /**
-     * @var UrlRepository
-     */
-    protected $repository;
 
     /**
-     * @var UrlValidator
-     */
-    protected $validator;
-
-    /**
-     * UrlsController constructor.
+     * Display the resource.
      *
-     * @param UrlRepository $repository
-     * @param UrlValidator $validator
-     */
-    public function __construct(UrlRepository $repository, UrlValidator $validator)
-    {
-        $this->repository = $repository;
-        $this->validator  = $validator;
-    }
-
-    /**
-     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    private function store($url)
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $urls = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $urls,
-            ]);
-        }
-
-        return view('urls.index', compact('urls'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  UrlCreateRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function store(UrlCreateRequest $request)
-    {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $url = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Url created.',
-                'data'    => $url->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $url = $this->repository->find($id);
+        Url::create(['url' => $url]);
 
         if (request()->wantsJson()) {
 
@@ -118,87 +30,43 @@ class UrlsController extends Controller
                 'data' => $url,
             ]);
         }
-
-        return view('urls.show', compact('url'));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
+     * This method is responsible for calling the service which is responsible for crawling
+     * the first page passed in the exercise. This service returns just de children URL which
+     * will be cralwed when the user click on "Crawl" the method crawl is activaded.
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function index()
     {
-        $url = $this->repository->find($id);
 
-        return view('urls.edit', compact('url'));
-    }
+        $links = Url::all();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  UrlUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function update(UrlUpdateRequest $request, $id)
-    {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $url = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Url updated.',
-                'data'    => $url->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
+        // Once the Url table is populated, its not necessary to crawl the first page of seminovosbh again
+        if(count($links) == 0){
+            $firstLinks = CrawlData::getLinksFirstPage();
+            foreach ($firstLinks as $link){
+                $formattedUrl = CrawlData::formatUrl($link);
+                if (!empty($formattedUrl)) {
+                    $this->store($formattedUrl);
+                }
             }
 
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $links = Url::all();
         }
+
+        return view('pages.url', compact('links'));
     }
 
+    public function getUrls() {
+        $links = Url::select('id', 'url')->get();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Url deleted.',
-                'deleted' => $deleted,
-            ]);
+        if(count($links) > 0){
+            return response()->json($links);
+        } else {
+            return response()->json([]);
         }
-
-        return redirect()->back()->with('message', 'Url deleted.');
     }
 }

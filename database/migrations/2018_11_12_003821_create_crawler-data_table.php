@@ -19,9 +19,10 @@ class CreateCrawlerDataTable extends Migration
             $table->foreign('url_id')->references('id')->on('urls');
             $table->string('marca');
             $table->string('modelo');
-            $table->date('ano_fabricacao');
-            $table->date('ano_modelo');
-            $table->float('preco', 14, 2);
+            $table->string('ano_fabricacao');
+            $table->string('ano_modelo');
+            $table->decimal('preco', 14, 2);
+            $table->bigInteger('veiculo_id');
             $table->timestamps();
         });
     }

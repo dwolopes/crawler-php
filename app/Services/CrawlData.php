@@ -10,6 +10,7 @@ class CrawlData
     const url = 'https://www.seminovosbh.com.br/resultadobusca/index/veiculo/carro/marca/BMW/modelo/1239/usuario/todos';
 
 
+    // Method responsible for getting the children links from the first Page, the const URL, first URL given in te exercise.
     static public function getLinksFirstPage(){
         $html = file_get_contents(self::url);
         $crawlerFirstPage = new Crawler($html, 'https://www.seminovosbh.com.br/');
@@ -21,6 +22,8 @@ class CrawlData
         return $nodeValues;
     }
 
+
+    // This method helps the Urlcontroller format the children's url to insert them in the database.
     static  public  function formatUrl($url) {
         $linkParsed = parse_url($url);
 
@@ -34,6 +37,8 @@ class CrawlData
 
     }
 
+    // This method helps the CrawlerController: recover, format e separate information based in each child of the
+    // the 'const url'. This way, the programme gets faster due to not having to crawl each child url to get all data.
     static  public  function getGeneralDataFromUrl($url) {
         $linkParsed = parse_url($url);
 
@@ -52,6 +57,7 @@ class CrawlData
         return $arraResulted;
     }
 
+    // Crawl and get data that is not in the URL from the page being crawled.
     public function getDataDetails($urlToInspect){
 
         $html = file_get_contents($urlToInspect);

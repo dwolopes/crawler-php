@@ -11,5 +11,6 @@
 |
 */
 
-Route::resource("/", "CrawlerController");
-Route::post("/crawl", "CrawlerController@crawl")->name('crawl');
+Route::resource("/", "UrlsController");
+Route::get("/getUrls", "UrlsController@getUrls");
+Route::post("/crawl", "CrawlerController@crawlStore")->name('crawl');

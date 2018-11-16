@@ -15,17 +15,21 @@ class CrawlerData extends Model implements Transformable
 {
     use TransformableTrait;
 
+    protected $table = "crawler-data";
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'marca',
-        'modelo',
-        'ano_fabricacao',
-        'ano_modelo',
-        'preco',
+        "url_id",
+        "marca",
+        "modelo",
+        "ano_fabricacao",
+        "ano_modelo",
+        "preco",
+        "veiculo_id"
     ];
 
     /**

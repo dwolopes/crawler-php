@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Entities\CrawlerData;
 use App\Entities\Url;
 use Illuminate\Http\Request;
+use function PHPSTORM_META\type;
 use Symfony\Component\DomCrawler\Crawler;
 use App\Services\CrawlData;
-
+use NumberFormatter;
 
 class CrawlerController extends Controller
 {
@@ -25,31 +26,9 @@ class CrawlerController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-
-
-        // Once the Url table is populated, its not necessary to crawl the first page of seminovosbh again
-        $links = Url::all();
-
-        if(count($links) == 0){
-            $firstLinks = CrawlData::getLinksFirstPage();
-            foreach ($firstLinks as $link){
-                $formattedUrl = CrawlData::formatUrl($link);
-                Url::create(['url' => $formattedUrl]);
-            }
-        }
-
-        return view('welcome');
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new resource. For each URL stored in the database
+     * Its called @getGeneralDataFromUrl, responsible for get the data crawling the HTML page.
+     * Aftwards, those data recovered from the HTML page is stored in the database.
      *
      * @return \Illuminate\Http\Response
      */
@@ -59,10 +38,48 @@ class CrawlerController extends Controller
         foreach ($savedUrls as $url){
             $price = $this->crawlDataService->getDataDetails($url->url);
             $arrayGeneralData = CrawlData::getGeneralDataFromUrl($url->url);
+            $formattedPrice  = floatval(preg_replace("/[^0-9,\,]/", "", $price));
+            $yearsArray = explode("-", $arrayGeneralData['ano']);
 
-            return gettype($price);
+            CrawlerData::create([
+                "url_id" => $url->id,
+                "marca" =>  $arrayGeneralData['marca'],
+                "modelo" => $arrayGeneralData['modelo'],
+                "ano_fabricacao" => $yearsArray['0'],
+                "ano_modelo" => $yearsArray['1'],
+                "preco" => $formattedPrice,
+                "veiculo_id" => $arrayGeneralData['id_veiculo'],
+            ]);
         }
+    }
 
+
+    /**
+     * Show the form for creating a new resource. For each URL stored in the database
+     * Its called @getGeneralDataFromUrl, responsible for get the data crawling the HTML page.
+     * Aftwards, those data recovered from the HTML page is stored in the database.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function crawlStore(Request $request)
+    {
+
+            $price = $this->crawlDataService->getDataDetails($request->url);
+            $arrayGeneralData = CrawlData::getGeneralDataFromUrl($request->url);
+            $formattedPrice  = floatval(preg_replace("/[^0-9,\,]/", "", $price));
+            $yearsArray = explode("-", $arrayGeneralData['ano']);
+
+            $crawlData = CrawlerData::create([
+                "url_id" => $request->id,
+                "marca" =>  $arrayGeneralData['marca'],
+                "modelo" => $arrayGeneralData['modelo'],
+                "ano_fabricacao" => $yearsArray['0'],
+                "ano_modelo" => $yearsArray['1'],
+                "preco" => $formattedPrice,
+                "veiculo_id" => $arrayGeneralData['id_veiculo'],
+            ]);
+
+            return response()->json($crawlData);
     }
 
     /**
