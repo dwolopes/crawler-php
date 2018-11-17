@@ -2,6 +2,9 @@
 
 namespace  App\Services;
 
+
+// lib used to crawl
+
 use Symfony\Component\DomCrawler\Crawler;
 
 class CrawlData
@@ -10,7 +13,7 @@ class CrawlData
     const url = 'https://www.seminovosbh.com.br/resultadobusca/index/veiculo/carro/marca/BMW/modelo/1239/usuario/todos';
 
 
-    // Method responsible for getting the children links from the first Page, the const URL, first URL given in te exercise.
+    // Method responsible for getting the children links from the first Page - the const URL - the first URL given in te exercise.
     static public function getLinksFirstPage(){
         $html = file_get_contents(self::url);
         $crawlerFirstPage = new Crawler($html, 'https://www.seminovosbh.com.br/');
@@ -23,7 +26,7 @@ class CrawlData
     }
 
 
-    // This method helps the Urlcontroller format the children's url to insert them in the database.
+    // This method helps the Urlcontroller format the children's url to insert them into the database.
     static  public  function formatUrl($url) {
         $linkParsed = parse_url($url);
 
@@ -37,8 +40,9 @@ class CrawlData
 
     }
 
-    // This method helps the CrawlerController: recover, format e separate information based in each child of the
-    // the 'const url'. This way, the programme gets faster due to not having to crawl each child url to get all data.
+    /**
+     * This function allows recover some information from the URL instead to recover them from the HTML page, which is slower.
+     */
     static  public  function getGeneralDataFromUrl($url) {
         $linkParsed = parse_url($url);
 
@@ -57,7 +61,7 @@ class CrawlData
         return $arraResulted;
     }
 
-    // Crawl and get data that is not in the URL from the page being crawled.
+    // Crawl and get data that is not in the URL from the page being crawled. It crawls the HTML of the page.
     public function getDataDetails($urlToInspect){
 
         $html = file_get_contents($urlToInspect);
