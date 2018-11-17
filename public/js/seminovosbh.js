@@ -1,5 +1,26 @@
 $( document ).ready(function() {
 
+    function cleanTableCells(url) {
+        $(`#${url.id}_marca`).empty();
+        $(`#${url.id}_modelo`).empty();
+        $(`#${url.id}_ano_fabricacao`).empty();
+        $(`#${url.id}_ano_modelo`).empty();
+        $(`#${url.id}_preco`).empty();
+        $(`#${url.id}_codigo_veiculo`).empty();
+        $(`#${url.id}_status_crawler`).empty();
+    }
+
+    function insertDataIntoTable(data) {
+        $(`#${data.url_id}_marca`).append(`<td>${data.marca}</td>`);
+        $(`#${data.url_id}_modelo`).append(`<td>${data.modelo}</td>`);
+        $(`#${data.url_id}_ano_fabricacao`).append(`<td>${data.ano_fabricacao}</td>`);
+        $(`#${data.url_id}_ano_modelo`).append(`<td>${data.ano_modelo}</td>`);
+        $(`#${data.url_id}_preco`).append(`<td>${data.preco}</td>`);
+        $(`#${data.url_id}_codigo_veiculo`).append(`<td>${data.veiculo_id}</td>`);
+        $(`#${data.url_id}_status_crawler`).append(`<td>Sucesso!</td>`);
+    }
+
+
     function crawlUrl(url, token) {
 
         $.ajaxSetup({
@@ -17,19 +38,13 @@ $( document ).ready(function() {
             dataType: 'JSON',
             /* remind that 'data' is the response of the AjaxController */
             success: function (data) {
-                // Buscar linha e veriricar se já houve crawler
-                $(`#${data.url_id}_marca`).append(`<td>${data.marca}</td>`);
-                $(`#${data.url_id}_modelo`).append(`<td>${data.modelo}</td>`);
-                $(`#${data.url_id}_ano_fabricacao`).append(`<td>${data.ano_fabricacao}</td>`);
-                $(`#${data.url_id}_ano_modelo`).append(`<td>${data.ano_modelo}</td>`);
-                $(`#${data.url_id}_preco`).append(`<td>${data.preco}</td>`);
-                $(`#${data.url_id}_codigo_veiculo`).append(`<td>${data.veiculo_id}</td>`);
-                $(`#${data.url_id}_status_crawler`).text("Sucesso!")
+                cleanTableCells(url);
+                insertDataIntoTable(data);
             },
 
             error: function (e) {
-                // Inserir failed na linha 
-                console.log(e);
+                $(`#${url.id}_status_crawler`).empty();
+                $(`#${url.id}_status_crawler`).append(`<td>Falhou :(</td>`);
             }
         });
 

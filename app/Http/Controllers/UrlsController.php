@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entities\Url;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use App\Services\CrawlData;
 
 /**
  * Class UrlsController.
