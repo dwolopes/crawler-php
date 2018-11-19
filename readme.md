@@ -23,11 +23,11 @@ Summing up, if you a a Docker Lover you just need to install Docker. But if you 
 A quick reminder, the port 3306 and 80 are used by the mysql-container and nginx container 
 respectively, both in local machine and in the containers themselfs. So to run this application locally ou even in your docker, stop services that could be using these ports or change the [docker-compose.yml](/docker-compose.yml) to not use these portes mencioned before.
 
-### Prerequisites with DOCKER
+#### Prerequisites with DOCKER
 
 To run docker in your machine, for each of the Operating System (OS) below you need some requirements.
 
-#### Windows
+##### Windows
 
 * Windows 10 64bit: Pro, Enterprise or Education (1607 Anniversary Update, Build 14393 or later);
 * Virtualization is enabled in BIOS. Typically, virtualization is enabled by default. This is different from having Hyper-V enabled. For more detail see Virtualization must be enabled in Troubleshooting;
@@ -36,7 +36,7 @@ To run docker in your machine, for each of the Operating System (OS) below you n
 
 Note: If your system does not meet the requirements to run Docker for Windows, you can install Docker Toolbox, which uses Oracle Virtual Box instead of Hyper-V.
 
-#### Linux (Ubuntu)
+##### Linux (Ubuntu)
 
 To install Docker CE, you need the 64-bit version of one of these Ubuntu versions:
 
@@ -46,7 +46,7 @@ To install Docker CE, you need the 64-bit version of one of these Ubuntu version
 
 Docker CE is supported on Ubuntu on x86_64, armhf, s390x (IBM Z), and ppc64le (IBM Power) architectures.
 
-### Installing
+#### Installing
 
 If you have the requirements needed access the installation guide from Docker according to you OS.
 
@@ -57,6 +57,52 @@ If you have the requirements needed access the installation guide from Docker ac
 * [linux-guide-ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
 
+#### Prerequisites with Laravel
+
+You will need to make sure your server meets the following requirements:
+
+* PHP >= 7.1.3
+* OpenSSL PHP Extension
+* PDO PHP Extension
+* Mbstring PHP Extension
+* Tokenizer PHP Extension
+* XML PHP Extension
+* Ctype PHP Extension
+* JSON PHP Extension
+* BCMath PHP Extension
+
+##### Install composer
+
+* [linux-mac](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos);
+* [windows](https://getcomposer.org/doc/00-intro.md#installation-windows).
+
+##### Running this project
+
+Clone this project to a folder in your local machine:
+
+```
+git clone (https://github.com/dwolopes/crawler-php.git)
+```
+
+After clone, run the follow command inside the recent created folder
+
+```
+composer install
+```
+
+Following that, create the key of the laravel project
+
+```
+php artisan key:generate
+```
+
+Least, but not least create the database and its tables
+
+```
+php artisan migrate
+```
+
+Open in your browser the link to your localhost using 80 port.
 
 
 ## Built With
