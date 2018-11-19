@@ -56,16 +56,29 @@ If you have the requirements needed access the installation guide from Docker ac
 
 * [linux-guide-ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
-Say what the step will be
 
-```
-Give the example
-```
 
-And repeat
 
-```
-until finished
-```
+## Built With
 
-End with an example of getting some data out of the system or using it for a little demo
+* [Laravel 5.7](https://laravel.com/docs/5.7) - The web framework used
+* [Docker](https://www.docker.com/) - A tool designed to make it easier to create, deploy, and run applications by using containers. 
+* [dom_crawler-symfony](https://symfony.com/doc/current/components/dom_crawler.html) - Used to crawl the URLs, the core of the project
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Authors
+
+* **Douglas Lopes** - *Initial work* - [crawler-php](https://github.com/dwolopes/crawler-php/)
+
+See also the list of [contributors](https://github.com/dwolopes/crawler-php/graphs/contributors who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
