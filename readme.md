@@ -46,7 +46,7 @@ To install Docker CE, you need the 64-bit version of one of these Ubuntu version
 
 Docker CE is supported on Ubuntu on x86_64, armhf, s390x (IBM Z), and ppc64le (IBM Power) architectures.
 
-#### Installing
+##### Installing
 
 If you have the requirements needed access the installation guide from Docker according to you OS.
 
@@ -57,7 +57,7 @@ If you have the requirements needed access the installation guide from Docker ac
 * [linux-guide-ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
 
-#### Prerequisites with Laravel
+#### Prerequisites with LARAVEL
 
 You will need to make sure your server meets the following requirements:
 
