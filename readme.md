@@ -12,7 +12,7 @@ As soon as you click the button, the table will be automatically filled by the d
 
 ## Demo
 
-[![demo](./public/img/seminovosbh.gif](https://github.com/dwolopes/crawler-php)
+![demo](App Working)(./public/img/seminovosbh.gif)
 
 
 ### Running the project and its Prerequisites
