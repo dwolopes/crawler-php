@@ -124,7 +124,3 @@ See also the list of [contributors](https://github.com/dwolopes/crawler-php/grap
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
