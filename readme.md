@@ -10,6 +10,11 @@ Just in the first page of the App, It is shown an introduction and a table. The 
 As soon as you click the button, the table will be automatically filled by the data. Each row (URL) will receive their respective data and it will says if the process of crawling was successful or not.  
 
 
+## Demo
+
+[![demo](./public/img/seminovosbh.gif](https://github.com/dwolopes/crawler-php)
+
+
 ### Running the project and its Prerequisites
 
 This application was build in Laravel with Docker. To run this application a [run.sh](/run.sh) file must be called and inner this file, there 
