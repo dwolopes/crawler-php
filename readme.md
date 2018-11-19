@@ -1,7 +1,7 @@
 # Crawler Seminovos BH
 
 This project is responsible for crawling [this web page](https://www.seminovosbh.com.br/resultadobusca/index/veiculo/carro/marca/BMW/modelo/1239/usuario/todos) 
-given by Seminovos BH and get from this page the 'children' links, and then crawl these 'children' links looking for vehicles' data, sush as, brand, price and so on . 
+given by Seminovos BH and get from this page the 'children' links, and then crawl these 'children' links looking for vehicles' data, such as, brand, price and so on . 
 
 ## Getting Started
 
